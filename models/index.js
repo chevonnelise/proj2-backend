@@ -27,6 +27,15 @@ const Category = bookshelf.model('Category',{
     }
 })
 
+const Brand = bookshelf.model('Brand',{
+    // table name should be plural
+    tableName:'brands',
+    //name of relationship is in plural form
+    products:function(){
+        return this.hasMany('Product');
+    }
+})
+
 const Tag = bookshelf.model('Tag',{
     tableName:'tags',
     products:function(){
@@ -38,4 +47,4 @@ const User = bookshelf.model('User',{
     tableName:'users'
 })
 
-module.exports = {Product, Category, Tag, User}
+module.exports = {Product, Category, Brand, Tag, User}

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // require in the model
-const {Product, Category, Tag} = require('../models');
+const {Product, Category, Brand, Tag} = require('../models');
 const {createProductForm, bootstrapField} = require('../forms');
 // const { required } = require('forms/lib/validators');
 
@@ -21,10 +21,13 @@ router.get('/add-product', async (req,res)=>{
     // get all categories
     const allCategories = await Category.fetchAll().map(category=>[category.get('id'), category.get('name')]);
 
+    // get all brands
+    const allBrands = await Brand.fetchAll().map(brand=>[brand.get('id'), brand.get('name')]);
+
     // get all tags
     const allTags = await Tag.fetchAll().map(tag=>[tag.get('id'),tag.get('name')]);
 
-    const productForm = createProductForm(allCategories, allTags);
+    const productForm = createProductForm(allCategories, allBrands, allTags);
     res.render('products/create',{
         form: productForm.toHTML(bootstrapField)
     })
@@ -99,10 +102,13 @@ router.get('/update-product/:productId', async (req,res)=>{
     // get all categories
     const allCategories = await Category.fetchAll().map(category=>[category.get('id'), category.get('name')]);
 
+    // get all brands
+    const allBrands = await Brand.fetchAll().map(brand=>[brand.get('id'), brand.get('name')]);
+
     // get all tags
     const allTags = await Tag.fetchAll().map(tag=>[tag.get('id'),tag.get('name')]);
 
-    const productForm = createProductForm(allCategories, allTags);
+    const productForm = createProductForm(allCategories, allBrands, allTags);
     
     // prefill the form with values from the product
     productForm.fields.name.value = product.get('name');
