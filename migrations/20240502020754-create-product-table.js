@@ -30,14 +30,17 @@ exports.up = function(db) {
     'cost':{
       'type':'decimal',
       'precision': 10,
-      'scale': 2
+      'scale': 2,
+      'notNull': true
     },
     'description':{
-      'type':'text'
+      'type':'text',
+      'notNull':true
     },
     'quantity':{
       'type':'int',
-      'unsigned':true
+      'unsigned':true,
+      'notNull':true
     }
   });
 };

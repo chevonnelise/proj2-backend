@@ -8,7 +8,18 @@ const bookshelf = require('../bookshelf');
 // create Product model
 // (arg1, arg2) = (model name, config object)
 const Product = bookshelf.model('Product',{
-    tableName:'products'
+    tableName:'products',
+    category:function(){
+        return this.belongsTo('Category');
+    }
 })
 
-module.exports = {Product}
+const Category = bookshelf.model('Category',{
+    tableName:'categories',
+    //name of relationship is in plural form
+    products:function(){
+        return this.hasMany('Product', 'category_id');
+    }
+})
+
+module.exports = {Product, Category}

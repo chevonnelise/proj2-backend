@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // require in the model
-const {Product} = require('../models');
+const {Product, Category} = require('../models');
 const {createProductForm, bootstrapField} = require('../forms');
 // const { required } = require('forms/lib/validators');
 
@@ -15,8 +15,11 @@ router.get('/', async (req,res)=> {
 );
 })
 
-router.get('/add-product', (req,res)=>{
-    const productForm = createProductForm();
+router.get('/add-product', async (req,res)=>{
+    // get all categories
+    const allCategories = await Category.fetchAll().map(category=>[category.get('id'), category.get('name')]);
+
+    const productForm = createProductForm(allCategories);
     res.render('products/create',{
         form: productForm.toHTML(bootstrapField)
     })
@@ -24,6 +27,7 @@ router.get('/add-product', (req,res)=>{
 
 router.post('/add-product', (req,res)=>{
     // create the product form object using caolan form
+
     const productForm = createProductForm();
     // use the form object to handle the request
     productForm.handle(req, {
