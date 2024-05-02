@@ -15,15 +15,23 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  // 3 parameters: table name, name of new column (foreign key), object that defines properties of the column
-  return db.addColumn('products', 'category_id',{
-    type:'int',
-    unsigned: true
-  })
+  return db.createTable('tags',{
+    id:{
+      type:'int',
+      primaryKey:true,
+      autoIncrement:true,
+      unsigned: true
+    },
+    name:{
+      type:'string',
+      length:100,
+      notNull:true
+    }
+  });
 };
 
 exports.down = function(db) {
-  return db.removeColumn('products', 'category_id');
+  return db.dropTable('tags');
 };
 
 exports._meta = {

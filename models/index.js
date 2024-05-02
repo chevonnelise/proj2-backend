@@ -11,6 +11,9 @@ const Product = bookshelf.model('Product',{
     tableName:'products',
     category:function(){
         return this.belongsTo('Category');
+    },
+    tags:function(){
+        return this.belongsToMany('Tag');
     }
 })
 
@@ -20,8 +23,16 @@ const Category = bookshelf.model('Category',{
     tableName:'categories',
     //name of relationship is in plural form
     products:function(){
-        return this.hasMany('Product', 'category_id');
+        return this.hasMany('Product');
     }
 })
 
-module.exports = {Product, Category}
+const Tag = bookshelf.model('Tag',{
+    tableName:'tags',
+    products:function(){
+        return this.belongsToMany('Product');
+    }
+})
+
+
+module.exports = {Product, Category, Tag}

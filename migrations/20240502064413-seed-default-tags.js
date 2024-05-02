@@ -14,16 +14,15 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function(db) {
-  // 3 parameters: table name, name of new column (foreign key), object that defines properties of the column
-  return db.addColumn('products', 'category_id',{
-    type:'int',
-    unsigned: true
-  })
+exports.up = async function(db) {
+  await db.insert('tags',['name'],['organic']);
+  await db.insert('tags',['name'],['gluten free']);
+  await db.insert('tags',['name'],['boosts immunity']);
+  await db.insert('tags',['name'],['high in antioxidants']);
 };
 
 exports.down = function(db) {
-  return db.removeColumn('products', 'category_id');
+  return db.runSql("DELETE FROM tags");
 };
 
 exports._meta = {

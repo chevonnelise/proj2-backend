@@ -27,7 +27,7 @@ const bootstrapField = function (name, object) {
 };
 
 // create a function that will create a form object
-const createProductForm = (categories) => {
+const createProductForm = (categories, tags) => {
     // object in the parameter is the form definition
     return forms.create({
         'name': fields.string({
@@ -68,6 +68,19 @@ const createProductForm = (categories) => {
             errorAfterField: true,
             widget: widgets.select(), // use the select dropdown
             choices: categories
+        }),
+        'brand_id':fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'tags': fields.string({
+            required:true,
+            errorAfterField:true,
+            widget: widgets.multipleSelect(),
+            choices:tags
         })
     })
 }
