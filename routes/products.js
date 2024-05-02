@@ -9,7 +9,7 @@ const {createProductForm, bootstrapField} = require('../forms');
 router.get('/', async (req,res)=> {
     // use the Product model to get all the products
     const products = await Product.collection().fetch({
-        withRelated:['category', 'tags']
+        withRelated:['category', 'tags', 'brand']
     });
     res.render('products/index', {
         products: products.toJSON()
@@ -140,7 +140,7 @@ router.post('/update-product/:productId', async (req,res)=>{
                 'id': req.params.productId
             }).fetch({
                 require: true, // makes sure that the product exists
-                withRelated:['tags']
+                withRelated:['brand','tags']
             });
 
             // every key in form.data is one column in the product row

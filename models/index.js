@@ -12,6 +12,9 @@ const Product = bookshelf.model('Product',{
     category:function(){
         return this.belongsTo('Category');
     },
+    brand:function(){
+        return this.belongsTo('Brand');
+    },
     tags:function(){
         return this.belongsToMany('Tag');
     }

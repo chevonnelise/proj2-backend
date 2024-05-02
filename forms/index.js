@@ -38,6 +38,16 @@ const createProductForm = (categories, brands, tags) => {
             }
 
         }),
+        'brand_id':fields.string({
+            label: 'Brand',
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: widgets.select(),
+            choices:brands
+        }),
         'cost': fields.string({
             required: true,
             errorAfterField: true,
@@ -67,16 +77,6 @@ const createProductForm = (categories, brands, tags) => {
             errorAfterField: true,
             widget: widgets.select(), // use the select dropdown
             choices: categories
-        }),
-        'brand_id':fields.string({
-            label: 'Brand',
-            required: true,
-            errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            },
-            widget: widgets.select(),
-            choices:brands
         }),
         'tags': fields.string({
             required:true,

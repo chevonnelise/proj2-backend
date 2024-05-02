@@ -9,6 +9,9 @@
             Product ID
         </th>
         <th>
+            Brand
+        </th>
+        <th>
             Name
         </th>
         <th>
@@ -34,6 +37,9 @@
             {{this.id}}
         </td>
         <td>
+            {{this.brand.name}}
+        </td>
+        <td>
             {{this.name}}
         </td>
         <td>
@@ -57,7 +63,7 @@
         </td>
         <td>
             <a href="/products/update-product/{{this.id}}" class="btn btn-primary">Update</a>
-             <a href="/products/delete-product/{{this.id}}" class="btn btn-danger">Delete</a>
+            <a href="/products/delete-product/{{this.id}}" class="btn btn-danger">Delete</a>
         </td>
     </tr>
     {{/each}}
