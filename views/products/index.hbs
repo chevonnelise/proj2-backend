@@ -21,7 +21,9 @@
             Quantity
         </th>
         <th>
+            Category
         </th>
+        <th></th>
     </thead>
     {{#each products}}
     <tr>
@@ -39,6 +41,9 @@
         </td>
         <td>
             {{this.quantity}}
+        </td>
+        <td>
+            {{this.category.name}}
         </td>
         <td>
             <a href="/products/update-product/{{this.id}}" class="btn btn-primary">Update</a>

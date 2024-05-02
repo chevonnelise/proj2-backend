@@ -8,7 +8,9 @@ const {createProductForm, bootstrapField} = require('../forms');
 
 router.get('/', async (req,res)=> {
     // use the Product model to get all the products
-    const products = await Product.collection().fetch();
+    const products = await Product.collection().fetch({
+        withRelated:['category']
+    });
     res.render('products/index', {
         products: products.toJSON()
     }
@@ -43,6 +45,7 @@ router.post('/add-product', (req,res)=>{
             product.set('cost', form.data.cost);
             product.set('description', form.data.description);
             product.set('quantity', form.data.quantity);
+            product.set('category_id', form.data.category_id);
             
             // save the product to the database
             await product.save();
