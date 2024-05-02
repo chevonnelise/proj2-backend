@@ -3,6 +3,9 @@ const express = require('express');
 const hbs = require('hbs');
 const wax = require('wax-on');
 require('dotenv').config();
+const session = require('express-session');
+const flash = require('connect-flash');
+const FileStore = require('session-file-store')(session);
 
 const app = express();
 
@@ -18,6 +21,24 @@ app.use(
         'extended': false
     })
 );
+
+// enable sessions
+app.use(session({
+    store: new FileStore(), // store session in file
+    secret: 'purple',
+    resave: false,
+    saveUninitialized: true // if a browser connects to the server w/o a session, connect a new one immediately
+}))
+
+// setup flash messages
+app.use(flash()); // enable flash messages
+
+// must do this after sessions are enabled - flash messages depend on sessions
+app.use(function(req,res,next){
+    console.log(req.session);
+    next();
+})
+
 
 async function main(){
     const landingRoutes = require('./routes/landing');

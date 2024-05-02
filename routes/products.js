@@ -57,9 +57,13 @@ router.post('/add-product', (req,res)=>{
             // save the tags relationship
             if (form.data.tags) {
                 // tags are separated by commas
-                product.tags().attach(form.data.tags.split(','));
+                await product.tags().attach(form.data.tags.split(','));
             }
 
+            // a flash message can only be set before a redirect
+            // arg1: message to show
+            // arg2: what message to show
+            req.flash('success','New product has been created successfully.');
             // same as 
             // INSERT INTO products (name, description, sku, price, quantity)
             // VALUES (${form.data.name}, ${form.data.description}, ${form.data.sku}, ${form.data.price}, ${form.data.quantity})

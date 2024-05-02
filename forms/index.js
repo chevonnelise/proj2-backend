@@ -44,8 +44,7 @@ const createProductForm = (categories, tags) => {
             cssClasses: {
                 label: ['form-label']
             },
-            validators: [ validators.min(0)],
-            step: '0.01'
+            validators: [ validators.min(0), validators.regexp(/^\d+(\.\d{1,2})?$/)]
         }),
         'description':fields.string({
             required: true,
