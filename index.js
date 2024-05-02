@@ -23,6 +23,7 @@ app.use(
 );
 
 // enable sessions
+// req.session is only available after you enable sessions
 app.use(session({
     store: new FileStore(), // store session in file
     secret: 'purple',
@@ -35,17 +36,29 @@ app.use(flash()); // enable flash messages
 
 // must do this after sessions are enabled - flash messages depend on sessions
 app.use(function(req,res,next){
-    console.log(req.session);
+    // req.flash() w/o a 2nd parameter will
+    // return the current flash message and delete it
+    res.locals.success_messages = req.flash('success_messages');
+
+    // error flash messages
+    res.locals.error_messages = req.flash('error_messages');
     next();
 })
 
+// share the current logged in user with all hbs files
+app.use(function(req,res,next){
+    res.locals.user = req.session.user;
+    next();
+})
 
 async function main(){
     const landingRoutes = require('./routes/landing');
     const productRoutes = require('./routes/products');
+    const userRoutes = require('./routes/users');
 
     app.use('/', landingRoutes);
     app.use('/products', productRoutes);
+    app.use('/users', userRoutes);
 }
 
 main();

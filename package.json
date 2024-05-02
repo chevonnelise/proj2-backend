@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate": "node node_modules/db-migrate/bin/db-migrate"
+    "migrate": "node node_modules/db-migrate/bin/db-migrate",
+    "start":"nodemon --ignore sessions"
   },
   "keywords": [],
   "author": "",

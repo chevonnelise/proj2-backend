@@ -63,7 +63,7 @@ router.post('/add-product', (req,res)=>{
             // a flash message can only be set before a redirect
             // arg1: message to show
             // arg2: what message to show
-            req.flash('success','New product has been created successfully.');
+            req.flash('success_messages','New product has been created successfully.');
             // same as 
             // INSERT INTO products (name, description, sku, price, quantity)
             // VALUES (${form.data.name}, ${form.data.description}, ${form.data.sku}, ${form.data.price}, ${form.data.quantity})
@@ -186,9 +186,10 @@ router.post('/delete-product/:productId', async(req,res)=>{
     }).fetch({
         required: true
     });
+    req.flash('error_messages', `${product.get('name')} has been deleted`)
 
     await product.destroy();
-    res.redirect('/products');
+    res.redirect('/products/');
 })
 
 module.exports = router;
