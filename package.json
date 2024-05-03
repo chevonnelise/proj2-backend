@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate": "node node_modules/db-migrate/bin/db-migrate",
-    "start":"nodemon --ignore sessions"
+    "start": "nodemon --ignore sessions"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +14,7 @@
   "dependencies": {
     "bookshelf": "^1.2.0",
     "connect-flash": "^0.1.1",
+    "csurf": "^1.11.0",
     "db-migrate": "^0.11.14",
     "db-migrate-mysql": "^2.3.2",
     "dotenv": "^16.4.5",

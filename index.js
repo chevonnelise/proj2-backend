@@ -6,6 +6,7 @@ require('dotenv').config();
 const session = require('express-session');
 const flash = require('connect-flash');
 const FileStore = require('session-file-store')(session);
+const csurf = require('csurf');
 
 const app = express();
 
@@ -48,6 +49,17 @@ app.use(function(req,res,next){
 // share the current logged in user with all hbs files
 app.use(function(req,res,next){
     res.locals.user = req.session.user;
+    next();
+})
+
+// enable csurf for CSRF protection after sessions are enabled
+// because csurf requires sessions to work
+app.use(csurf());
+
+// middleware to share the CSRF token with all hbs files
+app.use((req,res,next)=>{
+    // req.csrfToken( is avail because of 'app.use(csurf())'
+    res.locals.csrfToken = req.csrfToken();
     next();
 })
 

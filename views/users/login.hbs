@@ -4,7 +4,10 @@
 <h1>Login</h1>
 <form method="POST">
     {{{loginForm}}}
-    <input type="submit" class="btn btn-dark mt-3" value="Login"/>
+    <input type="submit" class="btn btn-info mt-3" value="Login"/>
+
+    {{!-- CSRF Token --}}
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
 </form>
 {{/block}}
 
