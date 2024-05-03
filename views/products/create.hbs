@@ -3,8 +3,11 @@
 {{#block "content"}}
 <h1>Create New Product</h1>
 <form method="POST">
-{{{form}}}
-<input type="submit" class="btn btn-dark mt-3" value="Add Product"/>
+    {{{form}}}
+    <input type="submit" class="btn btn-dark mt-3" value="Add Product" />
+
+    {{!-- CSRF Token --}}
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
 </form>
 
 {{/block}}

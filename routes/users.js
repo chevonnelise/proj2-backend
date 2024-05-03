@@ -109,6 +109,7 @@ router.get('/profile', [checkIfAuthenticated], (req, res) => {
     })
 })
 
+
 router.get('/logout', (req, res) => {
     req.session.user = null;
     req.flash('success_messages', "Goodbye! You have been successfully logged out.")

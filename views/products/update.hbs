@@ -4,7 +4,10 @@
 <h1>Updating {{product.name}}</h1>
 <form method="POST">
     {{{form}}}
-    <input type="submit" class="btn btn-dark mt-3" value="Update"/>
+    <input type="submit" class="btn btn-dark mt-3" value="Update" />
+
+    {{!-- CSRF Token --}}
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
 </form>
 
 {{/block}}

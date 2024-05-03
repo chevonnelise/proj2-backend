@@ -1,11 +1,49 @@
 {{#extends "base"}}
 
 {{#block "content"}}
-<h1>Register</h1>
-<form method="POST">
-    {{{userForm}}}
-    <input type="submit" class="btn btn-info mt-3" value="Register"/>
-</form>
+<div class="container">
+    <nav class="navbar navbar-expand-sm bg-light">
+        <div class="container-fluid">
+            <!-- Links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-warning" href="/" style="color: black;">Home</a>
+                </li>
+                <span style="margin-right: 5px;"></span>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-warning" href="/about" style="color: black;">About</a>
+                </li>
+                <span style="margin-right: 5px;"></span>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-warning" href="/contact" style="color: black;">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <span style="margin-right: 20px;"></span>
+
+        <div class="dropdown">
+            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton2"
+                data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 160px;">
+                Welcome
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+                <li><a class="dropdown-item active" href="/users/login">Login</a></li>
+                <li><a class="dropdown-item" href="/users/register">Register</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    {{!-- Page header --}}
+    <h1>Register</h1>
+    <form method="POST">
+        {{{userForm}}}
+        <input type="submit" class="btn btn-info mt-3" value="Register" />
+
+        {{!-- CSRF Token --}}
+        <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+    </form>
+
+</div>
 {{/block}}
 
 {{/extends}}

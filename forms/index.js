@@ -128,5 +128,4 @@ const createLoginForm = () => {
     })
 }
 
-
 module.exports = {createProductForm, createRegistrationForm, createLoginForm, bootstrapField};

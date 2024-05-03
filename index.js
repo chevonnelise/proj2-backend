@@ -63,6 +63,12 @@ app.use((req,res,next)=>{
     next();
 })
 
+// middleware to handle csrf errors
+app.use((err,req,res,next)=>{
+    // if the middleware function has four parameters
+    // then it is an error handler for the middlware directly before it
+})
+
 async function main(){
     const landingRoutes = require('./routes/landing');
     const productRoutes = require('./routes/products');
