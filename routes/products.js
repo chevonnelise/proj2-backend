@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     allCategories.unshift([0, '--------'])
     // get all brands
     const allBrands = await Brand.fetchAll().map(brand => [brand.get('id'), brand.get('name')]);
-
+    allBrands.unshift([0, '--------'])
     // get all tags
     const allTags = await Tag.fetchAll().map(tag => [tag.get('id'), tag.get('name')]);
 

@@ -1,9 +1,19 @@
 {
     "dev":{
-        "driver":"mysql",
-        "user":"superadmin",
-        "password":"admin1234",
-        "database":"superfoods",
-        "host": "127.0.0.1"
+        "driver":{
+            "ENV":"DB_DRIVER"
+        },
+        "user":{
+            "ENV":"DB_USER"
+        },
+        "password":{
+            "ENV":"DB_PASSWORD"
+        },
+        "database":{
+            "ENV":"DB_DATABASE"
+        },
+        "host": {
+            "ENV":"DB_HOST"
+        }
     }
 }
