@@ -29,14 +29,25 @@ router.get('/add-product', async (req,res)=>{
 
     const productForm = createProductForm(allCategories, allBrands, allTags);
     res.render('products/create',{
-        form: productForm.toHTML(bootstrapField)
+        form: productForm.toHTML(bootstrapField),
+        cloudinaryName: process.env.CLOUDINARY_NAME,
+        cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 })
 
-router.post('/add-product', (req,res)=>{
+router.post('/add-product', async (req,res)=>{
     // create the product form object using caolan form
+    // get all categories
+    const allCategories = await Category.fetchAll().map(category=>[category.get('id'), category.get('name')]);
 
-    const productForm = createProductForm();
+    // get all brands
+    const allBrands = await Brand.fetchAll().map(brand=>[brand.get('id'), brand.get('name')]);
+
+    // get all tags
+    const allTags = await Tag.fetchAll().map(tag=>[tag.get('id'),tag.get('name')]);
+
+    const productForm = createProductForm(allCategories, allBrands, allTags);
     // use the form object to handle the request
     productForm.handle(req, {
         // form user submitted has no error, pass in form as parameter
@@ -53,6 +64,7 @@ router.post('/add-product', (req,res)=>{
             product.set('quantity', form.data.quantity);
             product.set('category_id', form.data.category_id);
             product.set('brand_id', form.data.brand_id);
+            product.set('image_url', form.data.image_url);
             
             // save the product to the database
             await product.save();
@@ -124,7 +136,10 @@ router.get('/update-product/:productId', async (req,res)=>{
 
     res.render('products/update', {
         'form': productForm.toHTML(bootstrapField),
-        'product': product.toJSON()
+        'product': product.toJSON(),
+        cloudinaryName: process.env.CLOUDINARY_NAME,
+        cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 })
 

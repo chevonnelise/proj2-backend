@@ -4,11 +4,59 @@
 <h1>Create New Product</h1>
 <form method="POST">
     {{{form}}}
-    <input type="submit" class="btn btn-dark mt-3" value="Add Product" />
-
+    <div>
+        <a href="#" class="btn btn-primary" id="upload_widget">Upload image</a>
+        <img src="" style="display:none" id="uploaded_image"/>
+    </div>
     {{!-- CSRF Token --}}
     <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+    <input type="submit" class="btn btn-dark mt-3" value="Add Product" />
+    
 </form>
+
+{{/block}}
+
+{{#block "js"}}
+
+{{!-- 1. axios --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
+
+{{!-- 2. cloudinary widget --}}
+<script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+
+{{!-- 3. script for uploading --}}
+<script>
+    // function to get a signature from Express application
+    async function generateSignature(callback, params_to_sign){
+        const response = await axios.get('/cloudinary/sign', {
+            params:{
+                params_to_sign
+            }
+        });
+        // response.data will contain the signature from our Express route
+        callback(response.data);
+    }
+
+    // create the Upload widget
+    const widget = cloudinary.createUploadWidget({
+        cloudName: "{{cloudinaryName}}",
+        apiKey: "{{cloudinaryApiKey}}",
+        uploadPreset: "{{cloudinaryPreset}}",
+        uploadSignature: generateSignature
+    }, function(err,result){
+        if(!err && result && result.event =="success"){
+            document.querySelector("#id_image_url").value = result.info.url;
+            const uploadedImage = document.querySelector("#uploaded_image");
+            uploadedImage.style.display = "block";
+            uploadedImage.src = result.info.thumbnail_url;
+        }
+    })
+
+    document.querySelector("#upload_widget")
+        .addEventListener("click", function(){
+            widget.open();
+        })
+</script>
 
 {{/block}}
 

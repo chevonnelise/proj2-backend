@@ -2,11 +2,11 @@
 const express = require('express');
 const hbs = require('hbs');
 const wax = require('wax-on');
-require('dotenv').config();
 const session = require('express-session');
 const flash = require('connect-flash');
 const FileStore = require('session-file-store')(session);
 const csurf = require('csurf');
+require('dotenv').config();
 
 const app = express();
 
@@ -67,16 +67,24 @@ app.use((req,res,next)=>{
 app.use((err,req,res,next)=>{
     // if the middleware function has four parameters
     // then it is an error handler for the middlware directly before it
+    if (err && err.code == "EBADCSRFTOKEN"){
+        req.flash('error_messages',"The form has expired, please try again.");
+        res.redirect('back'); // this redirects to go back 1 page
+    } else {
+        next();
+    }
 })
 
 async function main(){
     const landingRoutes = require('./routes/landing');
     const productRoutes = require('./routes/products');
     const userRoutes = require('./routes/users');
+    const cloudinaryRoutes = require('./routes/cloudinary');
 
     app.use('/', landingRoutes);
     app.use('/products', productRoutes);
     app.use('/users', userRoutes);
+    app.use('/cloudinary', cloudinaryRoutes);
 }
 
 main();
