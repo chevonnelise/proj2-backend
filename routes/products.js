@@ -2,20 +2,21 @@ const express = require('express');
 const router = express.Router();
 
 // require in the model
-const { Product, Category, Brand, Tag } = require('../models');
+const { Product, Tag } = require('../models');
 const { createProductForm, bootstrapField, createSearchForm } = require('../forms');
 // const { required } = require('forms/lib/validators');
+const dataLayer = require('../dal');
 
 router.get('/', async (req, res) => {
 
     // get all categories
-    const allCategories = await Category.fetchAll().map(category => [category.get('id'), category.get('name')]);
+    const allCategories = await dataLayer.getAllCategories();
     allCategories.unshift([0, '--------'])
     // get all brands
-    const allBrands = await Brand.fetchAll().map(brand => [brand.get('id'), brand.get('name')]);
+    const allBrands = await dataLayer.getAllBrands();
     allBrands.unshift([0, '--------'])
     // get all tags
-    const allTags = await Tag.fetchAll().map(tag => [tag.get('id'), tag.get('name')]);
+    const allTags = await dataLayer.getAllTags();
 
     const searchForm = createSearchForm(allCategories, allBrands, allTags);
     searchForm.handle(req, {
@@ -62,9 +63,8 @@ router.get('/', async (req, res) => {
         },
         'empty': async function (form) {
             // use the Product model to get all the products if user submits empty search form
-            const products = await Product.collection().fetch({
-                withRelated: ['category', 'tags', 'brand']
-            });
+            const products = await dataLayer.getAllProducts();
+
             res.render('products/index', {
                 products: products.toJSON(),
                 searchForm: searchForm.toHTML(bootstrapField)
@@ -82,10 +82,10 @@ router.get('/', async (req, res) => {
 
 router.get('/add-product', async (req, res) => {
     // get all categories
-    const allCategories = await Category.fetchAll().map(category => [category.get('id'), category.get('name')]);
+    const allCategories = await dataLayer.getAllCategories();
 
     // get all brands
-    const allBrands = await Brand.fetchAll().map(brand => [brand.get('id'), brand.get('name')]);
+    const allBrands = await dataLayer.getAllBrands();
 
     // get all tags
     const allTags = await Tag.fetchAll().map(tag => [tag.get('id'), tag.get('name')]);
@@ -102,41 +102,22 @@ router.get('/add-product', async (req, res) => {
 router.post('/add-product', async (req, res) => {
     // create the product form object using caolan form
     // get all categories
-    const allCategories = await Category.fetchAll().map(category => [category.get('id'), category.get('name')]);
+    const allCategories = await dataLayer.getAllCategories();
 
     // get all brands
-    const allBrands = await Brand.fetchAll().map(brand => [brand.get('id'), brand.get('name')]);
+    const allBrands = await dataLayer.getAllBrands();
 
     // get all tags
-    const allTags = await Tag.fetchAll().map(tag => [tag.get('id'), tag.get('name')]);
+    const allTags = await dataLayer.getAllTags();
 
     const productForm = createProductForm(allCategories, allBrands, allTags);
     // use the form object to handle the request
     productForm.handle(req, {
         // form user submitted has no error, pass in form as parameter
         'success': async function (form) {
-            // access each field in the submitted form
-            // use form.data.<fieldname>
-
             // create an instance of the Product model
             // an instance of a product is one row in the Product model
-            const product = new Product();
-            product.set('name', form.data.name);
-            product.set('cost', form.data.cost);
-            product.set('description', form.data.description);
-            product.set('quantity', form.data.quantity);
-            product.set('category_id', form.data.category_id);
-            product.set('brand_id', form.data.brand_id);
-            product.set('image_url', form.data.image_url);
-
-            // save the product to the database
-            await product.save();
-
-            // save the tags relationship
-            if (form.data.tags) {
-                // tags are separated by commas
-                await product.tags().attach(form.data.tags.split(','));
-            }
+            const product = await dataLayer.createProduct(form.data);
 
             // a flash message can only be set before a redirect
             // arg1: message to show
@@ -167,21 +148,16 @@ router.get('/update-product/:productId', async (req, res) => {
 
     // fetch the product we want to update
     // emulate: SELECT * from products WHERE id = ${productId}
-    const product = await Product.where({
-        'id': productId
-    }).fetch({
-        require: true,
-        withRelated: ['tags'] // fetch the tag info when fetching the product
-    });
+    const product = await dataLayer.getProductById(productId);
 
     // get all categories
-    const allCategories = await Category.fetchAll().map(category => [category.get('id'), category.get('name')]);
+    const allCategories = await dataLayer.getAllCategories();
 
     // get all brands
-    const allBrands = await Brand.fetchAll().map(brand => [brand.get('id'), brand.get('name')]);
+    const allBrands = await dataLayer.getAllBrands();
 
     // get all tags
-    const allTags = await Tag.fetchAll().map(tag => [tag.get('id'), tag.get('name')]);
+    const allTags = await dataLayer.getAllTags();
 
     const productForm = createProductForm(allCategories, allBrands, allTags);
 
@@ -223,8 +199,7 @@ router.post('/update-product/:productId', async (req, res) => {
 
             // every key in form.data is one column in the product row
             const { tags, ...productData } = form.data;
-            product.set(productData);
-            await product.save();
+            await dataLayer.updateProduct(product, productData);
 
             // convet tags from string to array
             const tagIds = tags.split(',');

@@ -11,9 +11,10 @@ cloudinary.config({
 router.get('/sign', async (req,res)=>{
     // syntax for Cloudinary Upload Widget
     const params = req.query.params_to_sign;
+    const apiKey = process.env.CLOUDINARY_API_KEY
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
     // the signature is similar to CSRF protection
-    const signature = cloudinary.utils.api_sign_request(params, apiSecret);
+    const signature = cloudinary.utils.api_sign_request(params, apiKey, apiSecret);
     res.send(signature);
 })
 
