@@ -51,7 +51,7 @@ const User = bookshelf.model('User',{
 })
 
 const CartItem = bookshelf.model('CartItem',{
-    tableName:'users',
+    tableName:'cart_items',
     product:function(){
         return this.belongsTo('Product');
     },

@@ -27,7 +27,7 @@ app.use(
 // req.session is only available after you enable sessions
 app.use(session({
     store: new FileStore(), // store session in file
-    secret: 'purple',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true // if a browser connects to the server w/o a session, connect a new one immediately
 }))
@@ -80,11 +80,13 @@ async function main(){
     const productRoutes = require('./routes/products');
     const userRoutes = require('./routes/users');
     const cloudinaryRoutes = require('./routes/cloudinary');
+    const shoppingCartRoutes = require('./routes/shoppingCart');
 
     app.use('/', landingRoutes);
     app.use('/products', productRoutes);
     app.use('/users', userRoutes);
     app.use('/cloudinary', cloudinaryRoutes);
+    app.use('/cart', shoppingCartRoutes)
 }
 
 main();

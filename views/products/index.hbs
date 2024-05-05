@@ -6,7 +6,7 @@
 <h2>Search</h2>
 <form method="GET">
     {{{searchForm}}}
-    <input type="submit" class="btn btn-outline-dark mt-3"/>
+    <input type="submit" class="btn btn-outline-dark mt-3" />
 </form>
 <table class="table">
     <thead>
@@ -60,15 +60,11 @@
             {{this.category.name}}
         </td>
         <td>
-            {{#each this.tags}}
-            <label class="badge" style="color: rgb(0, 0, 0); background-color: #7edf60;">
-                {{this.name}}
-            </label>
-            {{/each}}
-        </td>
-        <td>
-            <a href="/products/update-product/{{this.id}}" class="btn btn-primary">Update</a>
-            <a href="/products/delete-product/{{this.id}}" class="btn btn-danger">Delete</a>
+            <div style="display: flex; flex-direction: column;">
+                <a href="/products/update-product/{{this.id}}" class="btn btn-primary">Update</a>
+                <a href="/products/delete-product/{{this.id}}" class="btn btn-danger">Delete</a>
+                <a href="/cart/{{this.id}}/add" class="btn btn-success">Add To Cart</a>
+            </div>
         </td>
     </tr>
     {{/each}}
