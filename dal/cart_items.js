@@ -32,12 +32,23 @@ const createCartItem = async function(userId, productId, quantity){
 
 const removeFromCart = async function(userId, productId){
     const cartItem = await getCartItemByUserAndProduct(userId, productId);
-    if (cartItem){
+    if (cartItem === 1){
         await cartItem.destroy();
-        return true;
+        return true; // Return true if the removal was successful
     }
-    return false;
+    return false; // Return false if the cart item doesn't exist
 }
+
+const decreaseQuantity = async function(userId, productId){
+    const cartItem = await getCartItemByUserAndProduct(userId, productId);
+    if (cartItem && cartItem.quantity > 1) {
+        cartItem.set('quantity', cartItem.quantity - 1);
+        await cartItem.save();
+        return true; // Return true if the quantity decreased
+    }
+    return false; // Return false if the cart item doesn't exist or the quantity is already 1
+}
+
 
 const updateQuantity = async function(userId, productId, newQuantity){
     const cartItem = await getCartItemByUserAndProduct(userId, productId);
@@ -49,4 +60,5 @@ const updateQuantity = async function(userId, productId, newQuantity){
     return false;
 }
 
-module.exports = {getCart,getCartItemByUserAndProduct, createCartItem, removeFromCart, updateQuantity};
+
+module.exports = {getCart,getCartItemByUserAndProduct, createCartItem, removeFromCart, decreaseQuantity, updateQuantity};

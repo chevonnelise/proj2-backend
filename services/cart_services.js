@@ -13,6 +13,17 @@ async function addToCart(userId, productId, quantity) {
     return true;
 }
 
+async function removeFromCart(userId, productId, quantity){
+    const cartItem = await cartDataLayer.getCartItemByUserAndProduct(userId, productId);
+    if (cartItem){
+        // existing item, decrease qty by 1
+        await cartDataLayer.decreaseQuantity(userId, productId, cartItem.get('quantity')-1);
+    } else {
+        await cartDataLayer.removeFromCart(userId,productId,quantity);
+    }
+    return true;
+}
+
 async function getCart(userId) {
     const cartItems = await cartDataLayer.getCart(userId);
 
@@ -36,4 +47,5 @@ async function getCart(userId) {
     return cartItems;
 }
 
-module.exports = { addToCart, getCart };
+
+module.exports = { addToCart, getCart, removeFromCart };
