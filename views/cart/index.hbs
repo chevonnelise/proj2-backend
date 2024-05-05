@@ -1,66 +1,32 @@
-{{!-- {{#extends "base"}}
-
-{{#block "content"}}
-<h1>Shopping Cart</h1>
-<div class="card">
-    <div class="card=body" style="padding: 10px;">
-        {{#each cartItems}}
-        {{#if this.quantity}}
-        <div class="card-title" style="padding: 10px;">
-            <h3>{{this.product.name}}</h3>
-        </div>
-        <ul style="padding-left: 20px;">
-            <li>Category: {{this.product.category.name}}</li>
-            <li>Cost: {{this.product.cost}}</li>
-            <li>
-                Quantity:
-                <a href="/cart/{{this.product.id}}/remove" class="btn btn-secondary btn-sm"
-                    style="padding: 5px 10px; margin-right: 5px;">-</a>
-                {{this.quantity}}
-                <a href="/cart/{{this.product.id}}/add" class="btn btn-secondary btn-sm"
-                    style="padding: 5px 10px; margin-left: 5px;">+</a>
-            </li>
-        </ul>
-        {{/if}}
-        {{/each}}
-
-
-    </div>
-</div>
-
-{{/block}}
-
-{{/extends}} --}}
-
 {{#extends "base"}}
 
 {{#block "content"}}
 <h1>Shopping Cart</h1>
 <div class="row">
     {{#each cartItems}}
-    {{#if this.quantity}}
     <div class="col-lg-4 col-md-6 col-sm-12" style="margin-bottom: 20px;">
         <div class="card">
             <div class="card-body">
                 <div class="card-title" style="padding: 10px;">
-                    <h3>{{this.product.name}}</h3>
+                    <h3 style="color:rgb(140, 192, 88)">{{this.product.name}}</h3>
                 </div>
                 <ul style="padding-left: 20px;">
                     <li>Category: {{this.product.category.name}}</li>
                     <li>Cost: {{this.product.cost}}</li>
+                    <form method="POST" action="/cart/{{this.product.id}}/updateQuantity">
                     <li>
-                        Quantity:
-                        <a href="/cart/{{this.product.id}}/remove" class="btn btn-secondary btn-sm"
-                            style="padding: 5px 10px; margin-right: 5px;">-</a>
-                        {{this.quantity}}
-                        <a href="/cart/{{this.product.id}}/add" class="btn btn-secondary btn-sm"
-                            style="padding: 5px 10px; margin-left: 5px;">+</a>
+                        Quantity: <input style="width:50px" type="text" value="{{this.quantity}}" name="newQuantity" />
+                        <input type="submit" value="Update" class="btn btn-primary btn-sm mb-1" />
+                        {{!-- csrfToken --}}
+                        <input type="hidden" name="_csrf" value="{{../csrfToken}}" />
                     </li>
+                    </form>
                 </ul>
+                <a href="/cart/{{this.product.id}}/remove" class="btn btn-danger btn-sm mt-3">Remove</a>
             </div>
         </div>
     </div>
-    {{/if}}
+
     {{/each}}
 </div>
 {{/block}}

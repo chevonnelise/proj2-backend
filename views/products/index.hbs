@@ -60,6 +60,15 @@
             {{this.category.name}}
         </td>
         <td>
+
+             {{#each this.tags}}
+            <label class="badge" style="color: rgb(0, 0, 0); background-color: rgb(151, 206, 95);">
+                {{this.name}}
+            </label>
+            {{/each}}
+        </td>
+        </td>
+        <td>
             <div style="display: flex; flex-direction: column;">
                 <a href="/products/update-product/{{this.id}}" class="btn btn-primary">Update</a>
                 <a href="/products/delete-product/{{this.id}}" class="btn btn-danger">Delete</a>
