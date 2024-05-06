@@ -58,7 +58,6 @@ app.use(function(req,res,next){
 
 // enable csurf for CSRF protection after sessions are enabled
 // because csurf requires sessions to work
-//app.use(csurf());
 const csurfInstance = csurf();
 
 // for csrf protection exclusion
@@ -101,6 +100,10 @@ async function main(){
     const cloudinaryRoutes = require('./routes/cloudinary');
     const shoppingCartRoutes = require('./routes/shoppingCart');
     const checkoutRoutes = require('./routes/checkout');
+    const api = {
+        products: require('./routes/api/products'),
+        users: require('./routes/api/users')
+    }
 
     app.use('/', landingRoutes);
     app.use('/products', productRoutes);
@@ -109,14 +112,9 @@ async function main(){
     app.use('/cart', shoppingCartRoutes);
     app.use('/checkout', checkoutRoutes);
 
-    // const api = {
-    //     products: require('./routes/api/products'),
-    //     users: require('./routes/api/users')
-    // }
-
     // RESTFul API endpoints
-    //app.use('/api/products', express.json,(api.products));
-    //app.use('/api/users', express.json(), api.users);
+    app.use('/api/products', express.json(), api.products);
+    app.use('/api/users', express.json(), api.users);
 }
 
 main();

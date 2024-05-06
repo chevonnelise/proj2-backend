@@ -12,10 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "bookshelf": "^1.2.0",
     "cloudinary": "^2.1.0",
     "connect-flash": "^0.1.1",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "csurf": "^1.11.0",
     "db-migrate": "^0.11.14",
     "db-migrate-mysql": "^2.3.2",
