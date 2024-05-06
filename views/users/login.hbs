@@ -37,10 +37,11 @@
     <h1>Login</h1>
     <form method="POST">
         {{{loginForm}}}
-        <input type="submit" class="btn btn-info mt-3" value="Login" />
-
         {{!-- CSRF Token --}}
         <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+        <input type="submit" class="btn btn-info mt-3" value="Login" />
+
+        
     </form>
 
 </div>

@@ -46,6 +46,7 @@ router.post('/register', (req, res) => {
 
 router.get('/login', (req, res) => {
     const loginForm = createLoginForm();
+    console.log(res.locals.csrfToken)
     res.render('users/login', {
         loginForm: loginForm.toHTML(bootstrapField)
     });

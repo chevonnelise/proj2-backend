@@ -28,15 +28,17 @@
 <script>
     // function to get a signature from Express application
     async function generateSignature(callback, params_to_sign){
+        console.log(params_to_sign)
         const response = await axios.get('/cloudinary/sign', {
             params:{
                 params_to_sign
             }
         });
+        console.log(response);
         // response.data will contain the signature from our Express route
         callback(response.data);
     }
-
+    
     // create the Upload widget
     const widget = cloudinary.createUploadWidget({
         cloudName: "{{cloudinaryName}}",
@@ -51,7 +53,7 @@
             uploadedImage.src = result.info.thumbnail_url;
         }
     })
-
+    console.log(widget);
     document.querySelector("#upload_widget")
         .addEventListener("click", function(){
             widget.open();

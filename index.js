@@ -7,6 +7,7 @@ const flash = require('connect-flash');
 const FileStore = require('session-file-store')(session);
 const csurf = require('csurf');
 require('dotenv').config();
+const cors = require('cors');
 
 const app = express();
 
@@ -22,6 +23,9 @@ app.use(
         'extended': false
     })
 );
+
+// // enable CORS before sessions
+app.use(cors());
 
 // enable sessions
 // req.session is only available after you enable sessions
@@ -54,12 +58,27 @@ app.use(function(req,res,next){
 
 // enable csurf for CSRF protection after sessions are enabled
 // because csurf requires sessions to work
-app.use(csurf());
+//app.use(csurf());
+const csurfInstance = csurf();
+
+// for csrf protection exclusion
+app.use(function(req,res,next){
+    // check if the request is  meant for the webhook
+    if (req.url === "/checkout/process_payment" || req.url.slice(0, 5) == '/api/') {
+        // exclude from CSRF protection
+        return next();
+    } 
+    csurfInstance(req,res,next);
+})
 
 // middleware to share the CSRF token with all hbs files
-app.use((req,res,next)=>{
-    // req.csrfToken( is avail because of 'app.use(csurf())'
-    res.locals.csrfToken = req.csrfToken();
+app.use(function(req,res,next){
+    // req.csrfToken() is available because of `app.use(csurf())`
+    console.log(req.csrfToken)
+    if (req.csrfToken) {
+        res.locals.csrfToken = req.csrfToken();
+        console.log(res.locals.csrfToken)
+    }
     next();
 })
 
@@ -81,12 +100,23 @@ async function main(){
     const userRoutes = require('./routes/users');
     const cloudinaryRoutes = require('./routes/cloudinary');
     const shoppingCartRoutes = require('./routes/shoppingCart');
+    const checkoutRoutes = require('./routes/checkout');
 
     app.use('/', landingRoutes);
     app.use('/products', productRoutes);
     app.use('/users', userRoutes);
     app.use('/cloudinary', cloudinaryRoutes);
-    app.use('/cart', shoppingCartRoutes)
+    app.use('/cart', shoppingCartRoutes);
+    app.use('/checkout', checkoutRoutes);
+
+    // const api = {
+    //     products: require('./routes/api/products'),
+    //     users: require('./routes/api/users')
+    // }
+
+    // RESTFul API endpoints
+    //app.use('/api/products', express.json,(api.products));
+    //app.use('/api/users', express.json(), api.users);
 }
 
 main();

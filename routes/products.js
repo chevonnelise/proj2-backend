@@ -40,11 +40,11 @@ router.get('/', async (req, res) => {
             }
 
             if (form.data.brand_id && form.data.brand_id != "0"){
-                queryBuilder.where('brand_id', "=" + form.data.brand_id);
+                queryBuilder.where('brand_id', "=" , form.data.brand_id);
             }
 
             if (form.data.category_id && form.data.category_id != "0"){
-                queryBuilder.where('category_id', "=" + form.data.category_id);
+                queryBuilder.where('category_id', "=" , form.data.category_id);
             }
 
             if (form.data.tags){
@@ -52,10 +52,11 @@ router.get('/', async (req, res) => {
                     .where('tag_id','in',form.data.tags.split(','));
             }
 
+            console.log(queryBuilder.query());
             const products = await queryBuilder.fetch({
                 withRelated:['category','brand','tags']
             });
-
+            console.log(products);
             res.render('products/index', {
                 products: products.toJSON(),
                 searchForm: form.toHTML(bootstrapField)
@@ -91,6 +92,7 @@ router.get('/add-product', async (req, res) => {
     const allTags = await Tag.fetchAll().map(tag => [tag.get('id'), tag.get('name')]);
 
     const productForm = createProductForm(allCategories, allBrands, allTags);
+    console.log(process.env.CLOUDINARY_NAME, process.env.CLOUDINARY_API_KEY, process.env.CLOUDINARY_UPLOAD_PRESET)
     res.render('products/create', {
         form: productForm.toHTML(bootstrapField),
         cloudinaryName: process.env.CLOUDINARY_NAME,
