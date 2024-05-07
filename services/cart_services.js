@@ -16,7 +16,7 @@ async function addToCart(userId, productId, quantity) {
 async function getCart(userId) {
     const cartItems = await cartDataLayer.getCart(userId);
 
-    // // Get tags from cart items
+    // Get tags from cart items
     // const cartTags = cartItems.map(item => item.tags);
 
     // if (cartTags.length === 0) {

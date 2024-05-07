@@ -73,10 +73,10 @@ app.use(function(req,res,next){
 // middleware to share the CSRF token with all hbs files
 app.use(function(req,res,next){
     // req.csrfToken() is available because of `app.use(csurf())`
-    console.log(req.csrfToken)
+    // console.log(req.csrfToken)
     if (req.csrfToken) {
         res.locals.csrfToken = req.csrfToken();
-        console.log(res.locals.csrfToken)
+        // console.log(res.locals.csrfToken)
     }
     next();
 })

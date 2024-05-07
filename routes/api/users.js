@@ -24,6 +24,7 @@ const getHashedPassword = function (plainPassword) {
 
 const {User, BlacklistedToken}  = require('../../models');
 
+
 router.post('/login', async function(req,res){
     console.log(req.body);
     // find user by email

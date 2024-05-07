@@ -211,7 +211,7 @@ router.post('/update-product/:productId', async (req, res) => {
             await product.tags().detach(existingTagIds);
 
             await product.tags().attach(tagIds);
-
+            req.flash('success_messages', 'Product has been updated successfully.');
             res.redirect('/products/')
         },
         'empty': function (form) {

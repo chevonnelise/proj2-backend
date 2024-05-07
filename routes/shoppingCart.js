@@ -7,6 +7,7 @@ const {checkIfAuthenticated} = require('../middlewares');
 router.get('/', async function(req,res){
     const currentLoggedInUser = req.session.user.id;
     const cartItems = await cartServices.getCart(currentLoggedInUser);
+    console.log(cartItems);
     res.render('cart/index',{
         cartItems: cartItems.toJSON()
     });
