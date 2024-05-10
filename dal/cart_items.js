@@ -34,7 +34,7 @@ const removeFromCart = async function(userId, productId){
     const cartItem = await getCartItemByUserAndProduct(userId, productId);
     if (cartItem){
         await cartItem.destroy();
-        return true; // Return true if the removal was successful
+        return cartItem; // Return true if the removal was successful
     }
     return false; // Return false if the cart item doesn't exist
 }
@@ -55,7 +55,7 @@ const updateQuantity = async function(userId, productId, newQuantity){
     if (cartItem){
         cartItem.set('quantity', newQuantity);
         await cartItem.save();
-        return true;
+        return cartItem;
     } 
     return false;
 }

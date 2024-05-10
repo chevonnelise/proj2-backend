@@ -15,7 +15,6 @@ const generateAccessToken = (user, tokenSecret, expiry) => {
 };
 
 
-
 const getHashedPassword = function (plainPassword) {
     const sha256 = crypto.createHash('sha256');
     const hash = sha256.update(plainPassword).digest('base64');
@@ -24,6 +23,47 @@ const getHashedPassword = function (plainPassword) {
 
 const {User, BlacklistedToken}  = require('../../models');
 
+router.get('/', async (req, res) => {
+    try {
+        const users = await User.fetchAll();
+        res.json(users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+router.post('/register', async function(req, res) {
+    try {
+        console.log("Register IN")
+        // Check if user with the provided email already exists
+        const existingUser = await User.where({
+            'email': req.body.email
+        }).fetch({ require: false });
+
+        if (existingUser) {
+            return res.status(400).json({ error: 'User with this email already exists' });
+        }
+
+        // Hash the password
+        const hashedPassword = getHashedPassword(req.body.password);
+
+        // Create a new user record
+        const newUser = await User.forge({
+            username: req.body.username,
+            email: req.body.email,
+            password: hashedPassword
+        }).save();
+
+        // Generate access token for the new user
+        const accessToken = generateAccessToken(newUser.toJSON(), process.env.TOKEN_SECRET, '10m');
+
+        res.status(201).json({ accessToken });
+    } catch (error) {
+        console.error('Error registering user:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 router.post('/login', async function(req,res){
     console.log(req.body);

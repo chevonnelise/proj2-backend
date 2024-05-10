@@ -102,7 +102,8 @@ async function main(){
     const checkoutRoutes = require('./routes/checkout');
     const api = {
         products: require('./routes/api/products'),
-        users: require('./routes/api/users')
+        users: require('./routes/api/users'),
+        cart: require('./routes/api/cart')
     }
 
     app.use('/', landingRoutes);
@@ -115,6 +116,7 @@ async function main(){
     // RESTFul API endpoints
     app.use('/api/products', express.json(), api.products);
     app.use('/api/users', express.json(), api.users);
+    app.use('/api/cart', express.json(), api.cart);
 }
 
 main();

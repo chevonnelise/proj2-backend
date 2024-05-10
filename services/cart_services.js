@@ -6,11 +6,11 @@ async function addToCart(userId, productId, quantity) {
     const cartItem = await cartDataLayer.getCartItemByUserAndProduct(userId, productId);
     if (cartItem){
         // existing item, increase qty by 1
-        await cartDataLayer.updateQuantity(userId, productId, cartItem.get('quantity')+1);
+       return await cartDataLayer.updateQuantity(userId, productId, cartItem.get('quantity')+1);
     } else {
-        await cartDataLayer.createCartItem(userId,productId,quantity);
+        return await cartDataLayer.createCartItem(userId,productId,quantity);
     }
-    return true;
+    //return true;
 }
 
 async function getCart(userId) {
