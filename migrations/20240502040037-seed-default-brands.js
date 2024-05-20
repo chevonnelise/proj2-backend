@@ -18,7 +18,7 @@ exports.up = function(db) {
   // table name, array of columns to insert into, values
   //
   // INSERT INTO products (name) VALUES ('Default')
-  return db.insert("products", ['name'],['Default']);
+  return db.insert("brands", ['name'],['Default']);
 };
 
 exports.down = function(db) {
