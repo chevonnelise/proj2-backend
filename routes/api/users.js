@@ -21,7 +21,7 @@ const getHashedPassword = function (plainPassword) {
     return hash;
 };
 
-const {User, BlacklistedToken}  = require('../../models');
+const { User, BlacklistedToken } = require('../../models');
 
 router.get('/', async (req, res) => {
     try {
@@ -33,12 +33,13 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/register', async function(req, res) {
+router.post('/register', async function (req, res) {
     try {
-        console.log("Register IN")
         // Check if user with the provided email already exists
         const existingUser = await User.where({
-            'email': req.body.email
+            'username': req.body.username,
+            'email': req.body.email,
+            // 'password': req.body.password
         }).fetch({ require: false });
 
         if (existingUser) {
@@ -65,11 +66,12 @@ router.post('/register', async function(req, res) {
     }
 });
 
-router.post('/login', async function(req,res){
+router.post('/login', async function (req, res) {
     console.log(req.body);
     // find user by email
     const user = await User.where({
-        'email': req.body.email
+        'username': req.body.username,
+        'email': req.body.email,
     }).fetch({
         required: false
     });
@@ -77,24 +79,27 @@ router.post('/login', async function(req,res){
     // matches
     if (user && user.get('password') === getHashedPassword(req.body.password)) {
         // login is succcessful
-        const accessToken = generateAccessToken(user, process.env.TOKEN_SECRET, "10m");
-        const refreshToken = generateAccessToken(user, process.env.REFRESH_TOKEN_SECRET, "1h")
+        const accessToken = generateAccessToken(user, process.env.TOKEN_SECRET, "1h");
+        const refreshToken = generateAccessToken(user, process.env.REFRESH_TOKEN_SECRET, "1d")
         res.json({
-            accessToken, refreshToken
+            accessToken, refreshToken, user : {
+                id: user.get("id"),
+                
+            }
         })
     } else {
         // login is not successful
         res.status(401);
         res.json({
-            'error':'Invalid login credentials'
+            'error': 'Invalid login credentials'
         })
     }
 })
 
-router.post('/refresh', async function(req,res){
+router.post('/refresh', async function (req, res) {
     const refreshToken = req.body.refreshToken;
     if (refreshToken) {
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async function(err,user){
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async function (err, user) {
             if (err) {
                 return res.sendStatus(401);
             }
@@ -110,7 +115,7 @@ router.post('/refresh', async function(req,res){
             if (blacklistedToken) {
                 res.status(401);
                 return res.json({
-                    'error':'Invalid refresh token'
+                    'error': 'Invalid refresh token'
                 })
             }
 
@@ -125,18 +130,18 @@ router.post('/refresh', async function(req,res){
     }
 })
 
-router.post('/logout', async function(req,res){
+router.post('/logout', async function (req, res) {
     // blacklist the refresh token
     const refreshToken = req.body.refreshToken;
     if (refreshToken) {
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async function(err,user){
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async function (err, user) {
             const token = new BlacklistedToken({
                 'token': refreshToken,
                 'date_created': new Date()
             });
             await token.save();
             res.json({
-                'message':"Logged out successfully"
+                'message': "Logged out successfully"
             })
         })
     } else {

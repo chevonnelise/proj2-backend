@@ -100,10 +100,12 @@ async function main(){
     const cloudinaryRoutes = require('./routes/cloudinary');
     const shoppingCartRoutes = require('./routes/shoppingCart');
     const checkoutRoutes = require('./routes/checkout');
+    const paymentRoutes = require('./routes/api/payment');
     const api = {
         products: require('./routes/api/products'),
         users: require('./routes/api/users'),
-        cart: require('./routes/api/cart')
+        cart: require('./routes/api/cart'),
+        checkout: require('./routes/api/checkout')
     }
 
     app.use('/', landingRoutes);
@@ -112,11 +114,13 @@ async function main(){
     app.use('/cloudinary', cloudinaryRoutes);
     app.use('/cart', shoppingCartRoutes);
     app.use('/checkout', checkoutRoutes);
+    app.use('/payment', paymentRoutes);
 
     // RESTFul API endpoints
     app.use('/api/products', express.json(), api.products);
     app.use('/api/users', express.json(), api.users);
     app.use('/api/cart', express.json(), api.cart);
+    app.use('/api/checkout', express.json(), api.checkout);
 }
 
 main();
