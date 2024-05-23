@@ -6,14 +6,18 @@ const { checkIfAuthenticated } = require('../../middlewares');
 const productDAL  = require('../../dal/products');
 const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
+
 router.post('/', async function(req,res){
     // 1. create line items that user is going to 
     const items = req.body.cartItems;
     console.log(items)
     const lineItems = [];
+    const order = await productDAL.
     for (let [product_id,quantity] of Object.entries(items)){
         const product = await productDAL.getProductById(product_id);
         console.log(product)
+        if (quantity === 0 )
+            continue;
         const lineItem = {
             quantity: quantity,
             // type: "invoiceitem",

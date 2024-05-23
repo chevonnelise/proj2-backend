@@ -1,4 +1,4 @@
-const { Product, Category, Tag, Brand} = require('../models');
+const { Product, Category, Tag, Brand, OrderItem, Order} = require('../models');
 
 async function getProductById(productId) {
     const product = await Product.where({
@@ -8,6 +8,16 @@ async function getProductById(productId) {
         withRelated: ['tags']  // when fetching the products, also fetch tags information
     });
     return product;
+}
+
+async function getOrder(userId) {
+    const order = await Order.where({
+        'user_id': userId,
+    }).fetch({
+        require: true,
+        withRelated:['orderItem.product']
+    });
+    return order;
 }
 
 async function getAllProducts() {
@@ -33,6 +43,7 @@ async function getAllTags() {
     return allTags;
 }
 
+
 async function createProduct(productData) {
     const product = new Product();
 
@@ -41,7 +52,7 @@ async function createProduct(productData) {
     // INSERT INTO products (name, cost, description)
     // VALUES (${form.data.name}, ${form.data.cost}, ${form.data.description})
 
-    product.set('name', productData.name)
+    product.set('name', productData.name);
     product.set('cost', productData.cost);
     product.set('description', productData.description);
     product.set('quantity', productData.quantity);
@@ -68,12 +79,19 @@ async function updateProduct(product, newProductData) {
     await product.save();
 }
 
+async function createOrder(orderData) {
+    const order = new Order();
+    order.set('id', orderData.id);
+    await order.save();
+}
+
 module.exports = {
+    getOrder,
     getAllProducts, 
     getAllCategories, 
     getAllTags, 
     getAllBrands,
     createProduct, 
     updateProduct,
-    getProductById
+    getProductById,
 }

@@ -4,10 +4,6 @@ const router = express.Router();
 const cartServices = require('../../services/cart_services');
 const {checkIfAuthenticated} = require('../../middlewares');
 
-router.get("/" ,(req,res)=>{
-    res.send("Test")
-})
-
 router.get('/:user_id', async function(req,res){
     const currentLoggedInUser = req.params.user_id;
     const cartItems = await cartServices.getCart(currentLoggedInUser);

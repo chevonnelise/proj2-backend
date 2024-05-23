@@ -3,9 +3,9 @@ const router = express.Router();
 
 // cart service layer
 const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const productDAL  = require('../../dal/products');
 
 router.post('/process_payment', express.raw({type:'application.json'}), async function(req,res){
-
     const payload = req.body;
 
     // retrieve endpoint secret
@@ -19,9 +19,8 @@ router.post('/process_payment', express.raw({type:'application.json'}), async fu
     try {
         // 1. extract payload and verify request is from Stripe
         event = Stripe.webhooks.constructEvent(payload, sigHeader, endpointSecret);
-
         // 2. retrieve payment session sent to Stripe to get payment
-        if (event.type == 'checkut.session.completed'){
+        if (event.type == 'checkout.session.completed'){
             const stripeSession = event.data.object; 
 
             // grab full payment session
@@ -38,15 +37,33 @@ router.post('/process_payment', express.raw({type:'application.json'}), async fu
 
             // 3. process order
             console.log("Session =", session);
-            console.timeLog("Line Items =", lineItems);
+            console.log("Line Items =", lineItems);
 
-            // 4. send a request back to Stripe
+            // 4. reflect reduced quantity in database
+            for (const item of lineItems.data) {
+                const productId = item.price.product.metadata.product_id;
+                const quantityPurchased = item.quantity;
+                console.log(quantityPurchased);
+
+                const product = await productDAL.getProductById(productId);
+                if (product) {
+                    product.set({
+                        quantity : product.get('quantity') - quantityPurchased
+                    })
+                    //product.set('quantity') = product.get('quantity') - quantityPurchased;
+                    console.log(product)
+                    await product.save();
+                }
+            }
+
+            // 5. send a request back to Stripe
             res.json({
                 'status':'Success'
             })
         } 
     } catch (error) {
         //if event is not from Stripe
+        console.log(error)
         res.status(500).json({
             error:error
         })

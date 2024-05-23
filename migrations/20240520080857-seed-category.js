@@ -15,15 +15,14 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = async function(db) {
-  // table name, array of columns to insert into, values
-  //
-  // INSERT INTO products (name) VALUES ('Default')
-  await db.insert("brands", ['name'],['Superfoods']);
-  await db.insert("brands", ['name'],['California Gold']);
+  await db.insert("categories", ['name'],['Tablet']);
+  await db.insert("categories", ['name'],['Powder']);
+  await db.insert("categories", ['name'],['Capsules']);
+  await db.insert("categories", ['name'],['Gummies']);
 };
 
 exports.down = function(db) {
-  return db.runSql("DELETE FROM products");
+  return db.runSql("DELETE FROM categories");
 };
 
 exports._meta = {
