@@ -1,13 +1,12 @@
-const {CartItem} = require("../models");
+const {CartItem, Order} = require("../models");
 
 //get items by an ID
-const getCart = async function(userId){
-    return await CartItem.collection()
+const getCartOrder = async function(userId){
+    return await Order
         .where({
             'user_id':userId
-        }).fetch({
-            require:false,
-            withRelated:['product','product.category', 'product.brand']
+        }).fetchAll({
+            withRelated:['orderItem.product']
         })
 }
 
@@ -61,4 +60,4 @@ const updateQuantity = async function(userId, productId, newQuantity){
 }
 
 
-module.exports = {getCart,getCartItemByUserAndProduct, createCartItem, removeFromCart, updateQuantity};
+module.exports = {getCartOrder,getCartItemByUserAndProduct, createCartItem, removeFromCart, updateQuantity};

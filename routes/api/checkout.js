@@ -12,8 +12,25 @@ router.post('/', async function(req,res){
     const items = req.body.cartItems;
     console.log(items)
     const lineItems = [];
-    const order = await productDAL.
+
+    // Create the order in the database
+    let order = 0;
+    try {
+        order = await productDAL.createOrder({ 
+            'user_id': req.body.user_id
+        });
+    } catch (error) {
+        console.error('Error creating order:', error);
+        return res.status(500).json({ error: 'Failed to create order' });
+    }
+
     for (let [product_id,quantity] of Object.entries(items)){
+        const orderItem = await productDAL.createOrderItem({
+            'order_id': order.get('id'),
+            product_id: product_id,
+            quantity: quantity
+        })
+
         const product = await productDAL.getProductById(product_id);
         console.log(product)
         if (quantity === 0 )

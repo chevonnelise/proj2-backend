@@ -67,7 +67,7 @@ const BlacklistedToken = bookshelf.model('BlacklistedToken', {
 const Order = bookshelf.model('Order',{
     tableName:'order',
     orderItem:function(){
-        return this.belongsToMany('Order');
+        return this.hasMany('OrderItem');
     }
 })
 

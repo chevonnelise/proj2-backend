@@ -105,7 +105,8 @@ async function main(){
         products: require('./routes/api/products'),
         users: require('./routes/api/users'),
         cart: require('./routes/api/cart'),
-        checkout: require('./routes/api/checkout')
+        checkout: require('./routes/api/checkout'),
+        order: require('./routes/api/order')
     }
 
     app.use('/', landingRoutes);
@@ -121,6 +122,7 @@ async function main(){
     app.use('/api/users', express.json(), api.users);
     app.use('/api/cart', express.json(), api.cart);
     app.use('/api/checkout', express.json(), api.checkout);
+    app.use('/api/order', express.json(), api.order);
 }
 
 main();

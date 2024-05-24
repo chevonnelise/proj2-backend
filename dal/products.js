@@ -10,7 +10,7 @@ async function getProductById(productId) {
     return product;
 }
 
-async function getOrder(userId) {
+async function getOrderById(userId) {
     const order = await Order.where({
         'user_id': userId,
     }).fetch({
@@ -81,12 +81,22 @@ async function updateProduct(product, newProductData) {
 
 async function createOrder(orderData) {
     const order = new Order();
-    order.set('id', orderData.id);
+    order.set('user_id', orderData.user_id);
     await order.save();
+    return order;
+}
+
+async function createOrderItem(orderData){
+    const orderItem = new OrderItem();
+    orderItem.set('order_id',orderData.order_id);
+    orderItem.set('product_id',orderData.product_id);
+    orderItem.set('order_quantity',orderData.quantity);
+    await orderItem.save();
+    return orderItem;
 }
 
 module.exports = {
-    getOrder,
+    getOrderById,
     getAllProducts, 
     getAllCategories, 
     getAllTags, 
@@ -94,4 +104,6 @@ module.exports = {
     createProduct, 
     updateProduct,
     getProductById,
+    createOrder,
+    createOrderItem
 }

@@ -2,14 +2,15 @@ const express = require('express');
 const router = express.Router();
 
 const cartServices = require('../../services/cart_services');
+const cartDAL = require('../../dal/cart_items');
 const {checkIfAuthenticated} = require('../../middlewares');
 
 router.get('/:user_id', async function(req,res){
     const currentLoggedInUser = req.params.user_id;
-    const cartItems = await cartServices.getCart(currentLoggedInUser);
-    console.log(cartItems);
+    const orderItems = await cartDAL.getCartOrder(currentLoggedInUser);
+    console.log(orderItems);
     res.json({
-        cartItems: cartItems.toJSON()
+        orderItems: orderItems.toJSON()
     });
 });
 
