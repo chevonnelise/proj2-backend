@@ -2,20 +2,20 @@
 **User Problems & Pain Points**
 * This website allows for superadmin and suppliers to login and update the product database for Superfoods ecommerce website ([Live Link](https://superfoods-react.netlify.app/)).
 
-**How do users navigate this web application**\
+**How do users navigate this web application:**\
 [Live Link](https://proj2-backend.onrender.com/)
 
-**Before logging in,**
-1. **Login**
+**Before logging in,**\
+1.**Login**
 - Upon entering the website, users can click on the top right 'Welcome' button > 'Login' and login via the following test user credentials to continue accessing product database:
   - Email: superadmin@superfoods.com
   - Password: super1234
 
-**After logging in,**
-2. **All Products**
+**After logging in,**\
+1.**All Products**
 - Users can click on 'All Products' to view current product catalogue and search for product.
 
-3. **Create New Product**
+2.**Create New Product**
 - Users can click on 'Create New Product' to create and add a new product to the database by filling in the product details i.e. product name, cost, category, tags, image.
 
 ## Screenshots of Web Application
